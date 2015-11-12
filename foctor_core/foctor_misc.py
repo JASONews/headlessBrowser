@@ -35,7 +35,7 @@ def stop_tcpdump():
 
 def make_folder(path):
     try:
-        command = "mkdir " + path
+        command = "mkdir -p " + path
         if os.path.exists(path) is False:
             os.system(command)
     except Exception as e:

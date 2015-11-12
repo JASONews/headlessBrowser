@@ -202,7 +202,7 @@ if __name__ == '__main__':
         display.start()
         fd = capture_path + "/har/"+url
         make_folder(fd)
-        profile = setup_profile(0,0,0) # set a new profile for firefox, you can use this profile to set preferences, home page etc.
+        profile = setup_profile() # set a new profile for firefox, you can use this profile to set preferences, home page etc.
         binary = FirefoxBinary('/usr/bin/firefox',sys.stdout)
         driver = webdriver.Firefox(firefox_profile=profile, firefox_binary=binary, timeout=900) # pass above created profile to be used in Firefox driver, and create a new Firefox Web driver object with that profile.
         driver.set_page_load_timeout(900) # set the page load element time to 60 secs.
