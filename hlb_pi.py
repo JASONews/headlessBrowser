@@ -148,7 +148,7 @@ class HeadlessBrowser:
             if external is not None:
                 external[http_url] = result
 
-       	    driver.close()
+            driver.close()
         except Exception as e:
             result['error'] = e.message
             print e
