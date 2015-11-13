@@ -23,7 +23,7 @@ class HeadlessBrowser:
 
     def __init__(self):
         self.display = Display(visible=False)
-        self.binary = FirefoxBinary(log_file=sys.stdout) # log_file for debug
+        self.binary = None
         self.profile = None
         self.driver = None
 
@@ -121,6 +121,9 @@ class HeadlessBrowser:
             profile = self.setup_profile()
             profile.set_preference("extensions.firebug.netexport.defaultLogDir", capture_path + "/har/"+url)
             profile.update_preferences()
+    
+            if self.binary is None:
+                self.binary = FirefoxBinary(log_file=sys.stdout) # log_file for debug
 
             driver = webdriver.Firefox(firefox_profile=profile, firefox_binary=self.binary, timeout=60)
             driver.set_page_load_timeout(60)
@@ -145,10 +148,10 @@ class HeadlessBrowser:
             if external is not None:
                 external[http_url] = result
 
+       	    driver.close()
         except Exception as e:
             result['error'] = e.message
             print e
-        driver.close()
 
         return result
 
@@ -220,8 +223,9 @@ class HeadlessBrowser:
         """
         close webdriver and clean tmp files
         :return:
-        """
-        self.driver.quit()
+		"""
+        if self.driver is not None:
+            self.driver.quit()
 
 
     def run(self, url=None, input_list=None):

@@ -1,4 +1,4 @@
-from hlb import HeadlessBrowser
+from hlb_pi import HeadlessBrowser
 import sys
 import os
 
