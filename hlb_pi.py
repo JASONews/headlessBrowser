@@ -253,15 +253,16 @@ class HeadlessBrowser:
         return results
 
     def foctor_get_requests(self, site_list_file, results):
-        capture_path = os.getcwd()
+        capture_path = os.getcwd() + "/"
+        print capture_path
         fc.make_folder(capture_path)
         display_mode = 0
         # driver, display, tor_pname = fc.crawl_setup(tor=False, capture_path=capture_path, display_mode=display_mode)
         site_list = fc.read_site_list(site_list_file=site_list_file, start_index=0, end_index=1 << 31)
         driver, display = fc.do_crawl(sites=site_list, driver=self.driver, display=self.display,
                                       capture_path=capture_path, callback=self.wrap_results,
-                                      external=results, fd=capture_path + "/har/",
-                                      files=len(os.listdir(capture_path + "/har/")))
+                                      external=results, fd=capture_path + "har/",
+                                      files=len(os.listdir(capture_path + "har/")))
         fc.teardown_driver(driver, display, display_mode)
         driver.quit()
 
