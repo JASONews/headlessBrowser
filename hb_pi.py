@@ -361,7 +361,7 @@ class HeadlessBrowser:
             self.quit()
             self.close_virtual_display()
 
-        with open("./hlb_results.json", "w") as f:
+        with open("./hb_results.json", "w") as f:
             json.dump(results, f, indent=4)
         print "Headless browser test finished"
         return results
