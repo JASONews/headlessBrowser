@@ -102,7 +102,7 @@ class HeadlessBrowser:
                 return results
             sys.stdout.write("\rwaiting for har file... %ds" % (wait_time))
             sys.stdout.flush()
-        print '\n'
+        print ''
         time.sleep(1)
         for fn in os.listdir(fd):
             if fn.endswith(".har") and fn.startswith(host):
