@@ -18,6 +18,7 @@ import errno
 import json
 import random
 import threading
+import subprocess
 
 
 class HeadlessBrowser:
@@ -137,12 +138,21 @@ class HeadlessBrowser:
                 sys.stdout.flush()
             print "\n"
         self.parsed += 1
+        rows, cols = subprocess.check_output(['stty', 'size']).split()
+        for col in (0, int(cols)):
+            sys.stdout.write("=")
+        sys.stdout.write('\n\n')
+        sys.stdout.flush()
+
         if external is not None:
             external[url] = results
         else:
             return results
 
     def divide_url(self, url):
+        """
+        divide url into host and path two parts
+        """
         if 'https://' in url:
             host = url[8:].split('/')[0]
             path = url[8+len(host):]
@@ -181,22 +191,7 @@ class HeadlessBrowser:
 
 
             # fc.load_page(self.driver, http_url)
-            prev_window = None
-            if self.parsed is not 0:
-                prev_window = self.driver.current_window_handle
-                body = self.driver.find_element_by_tag_name("body")
-                #body.send_keys(Keys.CONTROL + 't')
-                body.send_keys(Keys.COMMAND + 't')
-                time.sleep(.5)
-                # body.send_keys(Keys.CONTROL + Keys.TAB)
-                current_window = self.driver.current_window_handle
-                print prev_window
-                print current_window
-                self.driver.switch_to_window(prev_window)
-                # self.driver.close()
-                self.driver.switch_to_window(current_window)
-                print 'new tab'
-
+            fc.switch_tab(self.driver)
             self.load_page(http_url)
 
             print "driver get: " + http_url
@@ -268,35 +263,14 @@ class HeadlessBrowser:
                 host, path = self.divide_url(row)
 
             self.get(host=host, files_count=len(os.listdir(os.getcwd()+"/har/")), path=path, ssl=ssl, external=results)
-        # wait_time = 0
-        #
-        #     while threading.activeCount() > max_threads:
-        #         time.sleep(1)
-        #         wait_time += 1
-        #         if wait_time >= thread_wait_timeout:
-        #             threads_error = True
-        #             break
-        #
-        #     if threads_error:
-        #         results['error'] = "Threads took too long to finish."
-        #         break
-        #
-        #     time.sleep(delay_time)
-        #
-        #     thread = threading.Thread(target=self.get,args=(host, path, ssl, results))
-        #
-        #     thread.setDaemon(1)
-        #     thread.start()
-        #     threads.append(thread)
-        #
-        # for thread in threads:
-        #     thread.join(thread_wait_timeout)
 
         return results
 
     def foctor_get_requests(self, site_list_file, results):
+        """
+        use foctor_core library do get requests
+        """
         capture_path = os.getcwd() + "/"
-        print capture_path
         fc.make_folder(capture_path)
         display_mode = 0
         # driver, display, tor_pname = fc.crawl_setup(tor=False, capture_path=capture_path, display_mode=display_mode)
@@ -339,7 +313,7 @@ class HeadlessBrowser:
         self.profile = self.setup_profile()
         self.driver = webdriver.Firefox(firefox_profile=self.profile, firefox_binary=self.binary, timeout=60)
         self.driver.set_page_load_timeout(60)
-        fc.make_folder(os.getcwd() + "har/")
+        fc.make_folder(os.getcwd() + "/har/")
 
         afile = False
         if url:
