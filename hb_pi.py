@@ -290,12 +290,16 @@ class HeadlessBrowser:
         if self.driver is not None:
             self.driver.quit()
 
-    def run(self, url=None, input_list=None, input_file=None, verbose=0):
+    def run(self, input_file, url=None, input_list=None, verbose=0):
         """
         run the headless browser with given input
         if url given, the proc will only run hlb with given url and ignore input_list.
         :param url:
         :param input_list:
+        :param input_file: the name of the file in "index url" format. i.e.
+                1, www.facebook.com
+                1, www.google.com
+                ...
         :return:
         """
         if not url and not input_list and not input_file:
