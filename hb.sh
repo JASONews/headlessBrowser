@@ -18,12 +18,17 @@ hb-start() {
 hb-run() {
 	if [ $1 ]; then
 		echo "$1"
-		python hb_test.py "$1"
+		python hb_run.py "$1"
 	else
-		python hb_test.py -f input_list.txt
+		python hb_run.py -f input_list.txt
 	fi
 }
 
 hb-clean() {
-	rm -fr har htmls screenshots hb_results.json
+	rm -fr har htmls screenshots 
+}
+
+hb-clean-all() {
+	hb-clean
+	rm -rf hb_results.json
 }
