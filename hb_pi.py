@@ -138,9 +138,6 @@ class HeadlessBrowser:
                 sys.stdout.flush()
             print "\n"
         self.parsed += 1
-        rows, cols = subprocess.check_output(['stty', 'size']).split()
-        for col in (0, int(cols)):
-            sys.stdout.write("=")
         sys.stdout.write('\n\n')
         sys.stdout.flush()
 
